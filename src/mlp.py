@@ -41,7 +41,7 @@ for i in range(0, len(mlps)):
 # TESTING PHASE:
 test_file_name = ''
 print('Enter file name to classify:')
-test_file_name = input('circles:')
+test_file_name = input('enter the filename:')
 
 test_file_path = './../test-images/' + test_file_name
 
