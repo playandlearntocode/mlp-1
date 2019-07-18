@@ -1,25 +1,24 @@
-# Extract Image Features and save them to a CSV file
+# Main MLP program
 import numpy
 from PIL import Image
 from src.classes.mlp.MLP import MLP
-from src.classes.extraction.ImageFeatureExtractor import ImageFeatureExtractor
 from src.classes.csv.CsvDataLoader import CsvDataLoader
+from src.classes.extraction.ImageFeatureExtractor import ImageFeatureExtractor
 
-print('MLP starting...')
+print('MLP program starting...')
 
 #Load training data from CSV files:
 csv_data_loader = CsvDataLoader()
 data_circle = csv_data_loader.get_training_data('./../csv/correct-outputs-circle.txt')
 data_line = csv_data_loader.get_training_data('./../csv/correct-outputs-line.txt')
 
-mlp_circle = MLP(data_circle)
-mlp_circle.train_network()
-
 mlps = [MLP(data_circle), MLP(data_line)]
 # mlps[0] - circle detector
 # mlps[1] - line detector
 
-# BACKPROPAGATION PROPERTIES:
+# TRAINING PHASE:
+
+# BACKPROPAGATION SETTINGS:
 TRAIN_ITERATIONS = 100
 TARGET_ACCURACY = 2
 
@@ -33,16 +32,13 @@ for i in range(0, len(mlps)):
         mlps[i].train_network()
         (total_delta, total_loss) = mlps[i].calculate_total_error_on_dataset(mlps[i].learning_examples_array)
 
-        # print ('TOTAL DETLA:')
-        # print(total_delta)
-        #
-        print('TOTAL LOSS (' + str(i) + '):')
+        print('TOTAL LOSS AT ITERATION (' + str(i) + '):')
         print(total_loss)
-
         train_count += 1
 
     print ('Training stopped at step #' + str(train_count) + ' for i=' + str(i))
 
+# TESTING PHASE:
 test_file_name = ''
 print('Enter file name to classify:')
 test_file_name = input('circles:')
